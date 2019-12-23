@@ -46,8 +46,14 @@ exports.up = function(knex) {
       table.string('description')
     }),
 
-    knex.schema.createTable('matches', (table) => {
-      
+    knex.schema.createTable('swipes', (table) => {
+      table.increments('id').primary()
+      table.integer('user_id').unsigned()
+      table.foreign('user_id').onDelete('CASCADE').references('users.id')
+      table.integer('shown_user_id').unsigned()
+      table.foreign('shown_user_id').onDelete('CASCADE').references('users.id')
+      table.index(['shown_user_id'])
+      table.boolean('liked')
     })
   ])
   
@@ -57,16 +63,9 @@ exports.down = function(knex) {
   return Promise.all([
     knex.schema.dropTable('dog_images'),
     knex.schema.dropTable('dogs'),
+    knex.schema.dropTable('swipes'),
     knex.schema.dropTable('reports'),
     knex.schema.dropTable('messages'),
     knex.schema.dropTable('users')
   ])
 };
-
-
-// exports.down = function(knex) {
-//   return Promise.all([
-//     knex.schema.dropTable('palettes'),
-//     knex.schema.dropTable('projects')
-//   ])
-// };
