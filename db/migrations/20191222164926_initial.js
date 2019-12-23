@@ -44,11 +44,29 @@ exports.up = function(knex) {
       table.integer('user_id').unsigned()
       table.foreign('user_id').onDelete('CASCADE').references('users.id')
       table.string('description')
+    }),
+
+    knex.schema.createTable('matches', (table) => {
+      
     })
   ])
   
 };
 
 exports.down = function(knex) {
-  
+  return Promise.all([
+    knex.schema.dropTable('dog_images'),
+    knex.schema.dropTable('dogs'),
+    knex.schema.dropTable('reports'),
+    knex.schema.dropTable('messages'),
+    knex.schema.dropTable('users')
+  ])
 };
+
+
+// exports.down = function(knex) {
+//   return Promise.all([
+//     knex.schema.dropTable('palettes'),
+//     knex.schema.dropTable('projects')
+//   ])
+// };
