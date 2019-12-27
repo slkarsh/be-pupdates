@@ -1,0 +1,110 @@
+module.exports = [
+  {
+    id: 1,
+    user_id: 1,
+    name: 'Fido',
+    sex: 'male',
+    breed: 'golden retriever',
+    size: 'large',
+    age: 4,
+    fixed: true,
+    vaccinated: true,
+    good_with_kids: true
+  },
+  {
+    id: 2,
+    user_id: 2,
+    name: 'Hank',
+    sex: 'male',
+    breed: 'border collie',
+    size: 'medium',
+    age: 1,
+    fixed: false,
+    vaccinated: false,
+    good_with_kids: true
+  },
+  {
+    id: 3,
+    user_id: 2,
+    name: 'Goofy',
+    sex: 'male',
+    breed: 'doberman',
+    size: 'large',
+    age: 5,
+    fixed: true,
+    vaccinated: true,
+    good_with_kids: false
+  },
+  {
+    id: 4,
+    user_id: 3,
+    name: 'Molly',
+    sex: 'female',
+    breed: 'golden retriever',
+    size: 'large',
+    age: 2,
+    fixed: true,
+    vaccinated: true,
+    good_with_kids: true
+  },
+  {
+    id: 5,
+    user_id: 3,
+    name: 'Sparkles',
+    sex: 'female',
+    breed: 'papillon',
+    size: 'small',
+    age: 8,
+    fixed: true,
+    vaccinated: true,
+    good_with_kids: false
+  },
+  {
+    id: 6,
+    user_id: 3,
+    name: 'Fluffy',
+    sex: 'female',
+    breed: 'chihuahua',
+    size: 'very small',
+    age: 12,
+    fixed: false,
+    vaccinated: false,
+    good_with_kids: false
+  },
+  {
+    id: 7,
+    user_id: 3,
+    name: 'Larry',
+    sex: 'male',
+    breed: 'german shepherd',
+    size: 'large',
+    age: 5,
+    fixed: true,
+    vaccinated: true,
+    good_with_kids: true
+  },
+  {
+    id: 8,
+    user_id: 4,
+    name: 'Oliver',
+    sex: 'male',
+    breed: 'chocolate lab',
+    size: 'large',
+    age: 1,
+    fixed: true,
+    vaccinated: true,
+    good_with_kids: true
+  },
+  {
+    id: 9,
+    user_id: 4,
+    name: 'Tallulah',
+    sex: 'female',
+    breed: 'mutt',
+    size: 'medium',
+    age: 6,
+    fixed: true,
+    vaccinated: true,
+    good_with_kids: false
+  }
+]
