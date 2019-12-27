@@ -23,6 +23,7 @@ exports.up = function(knex) {
       table.boolean('fixed')
       table.boolean('vaccinated')
       table.boolean('good_with_kids')
+      table.index(['user_id'])
     }),
 
     knex.schema.createTable('dog_images', (table) => {
@@ -37,6 +38,7 @@ exports.up = function(knex) {
       table.integer('user_id').unsigned()
       table.foreign('user_id').onDelete('CASCADE').references('users.id')
       table.string('content')
+      table.index(['user_id'])
     }),
 
     knex.schema.createTable('reports', (table) => {
