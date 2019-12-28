@@ -67,4 +67,26 @@ app.get('/api/v1/users/:id', (request, response) => {
 })
 
 
+app.get('/api/v1/dog_images', (request, response) => {
+  database('dog_images').select()
+  .then((images) => {
+    response.status(200).json(images)
+  })
+  .catch((error) => {
+    response.status(500).json({ error })
+  })
+})
+
+app.get('/api/v1/dog_images/:id', (request, response) => {
+  database('dog_images')
+    .where('dog_id', request.params.id)
+    .then((images) => {
+      if (images.length) {
+        response.status(200).json(images)
+      } else {
+        response.status(404).json({ error: `Could not find photos`})
+      }
+    })
+    .catch(error => response.status(500).json({ error }))
+})
 
