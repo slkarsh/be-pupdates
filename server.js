@@ -3,6 +3,7 @@ const app = express()
 const environment = process.env.NODE_ENV || 'development'
 const configuration = require('./knexfile')[environment]
 const database = require('knex')(configuration)
+const cors = require('cors')
 
 
 app.set('port', process.env.PORT || 3000)
@@ -39,15 +40,31 @@ app.get('/api/v1/dogs', (request, response) => {
 })
 
 app.get('/api/v1/users/:id/dogs', (request, response) => {
-  const { id } = request.params
-
-  database('dogs').where(user_id === request.params.id)
+  database('dogs').where('user_id', request.params.id)
     .then((dogs) => {
       if (dogs.length) {
-        response.status(200).json(dogs[0])
+        response.status(200).json(dogs)
       } else {
         response.status(404).json({ error: `Could not finding matching user and dogs`})
       }
     })
     .catch((error) => response.status(500).json({ error }))
 })
+
+
+app.get('/api/v1/users/:id', (request, response) => {
+  const { id } = request.params
+  database('users')
+    .where({ id })
+    .then((user) => {
+      if (user.length) {
+        response.status(200).json(user)
+      } else {
+        response.status(404).json({ error: `Could not find matching user`})
+      }
+    })
+    .catch(error => response.status(500).json({ error }))
+})
+
+
+
