@@ -40,8 +40,6 @@ app.get('/api/v1/dogs', (request, response) => {
 })
 
 app.get('/api/v1/users/:id/dogs', (request, response) => {
-  const { id } = request.params
-
   database('dogs').where('user_id', request.params.id)
     .then((dogs) => {
       if (dogs.length) {
@@ -56,7 +54,6 @@ app.get('/api/v1/users/:id/dogs', (request, response) => {
 
 app.get('/api/v1/users/:id', (request, response) => {
   const { id } = request.params
-
   database('users')
     .where({ id })
     .then((user) => {
