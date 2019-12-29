@@ -109,26 +109,6 @@ app.post('/api/v1/login', (request, response) => {
     .catch(error => response.status(500).json({ error }))
 })
 
-// app.post('/api/v1/dogs', (request, response) => {
-//   const receivedData = request.body
-//   console.log('rec', receivedData)
-
-//   for (const requiredParam of ['user_id', 'name', 'sex', 'breed', 'size', 'age', 'fixed', 'vaccinated', 'good_with_kids']) {
-//     if (!receivedData[requiredParam]) {
-//       return response.status(422).json({
-//         error: `Expected { user_id: <int>, name: <string>, sex: <string>, breed: <string>, size: <string>, age: <int>, fixed: <boolean>, vaccinated: <boolean>, good_with_kids: <boolean> },
-//         Missing ${requiredParam}`
-//       })
-//     }
-//   }
-
-//   database('dogs')
-//     .insert(receivedData, 'id')
-//     .then(newDog => response.status(201).json({ id: newDog[0]}))
-//     .catch(error => response.status(500).json({ error }))
-// })
-
-
 app.post('/api/v1/users/:id/dogs', async (request, response) => {
   const newDog = request.body
   console.log('new dog', newDog)
