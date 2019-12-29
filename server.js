@@ -99,14 +99,105 @@ app.post('/api/v1/login', (request, response) => {
     .then(user => {
       if (user.length && password === user[0].password) {
         const { first_name, id } = user[0]
-        return response.status(200).send({ first_name, id})
+        return response.status(200).json({ first_name, id})
       } else if (user.length && password !== user.password) {
-        console.log('user pw', user[0].password)
-        return response.status(404).send({ error: 'Password incorrect, please try again'})
+        return response.status(404).json({ error: 'Password incorrect, please try again'})
       } else {
-        return response.status(404).send({ error: 'User not found'})
+        return response.status(404).json({ error: 'User not found'})
       }
     })
     .catch(error => response.status(500).json({ error }))
 })
 
+// app.post('/api/v1/dogs', (request, response) => {
+//   const receivedData = request.body
+//   console.log('rec', receivedData)
+
+//   for (const requiredParam of ['user_id', 'name', 'sex', 'breed', 'size', 'age', 'fixed', 'vaccinated', 'good_with_kids']) {
+//     if (!receivedData[requiredParam]) {
+//       return response.status(422).json({
+//         error: `Expected { user_id: <int>, name: <string>, sex: <string>, breed: <string>, size: <string>, age: <int>, fixed: <boolean>, vaccinated: <boolean>, good_with_kids: <boolean> },
+//         Missing ${requiredParam}`
+//       })
+//     }
+//   }
+
+//   database('dogs')
+//     .insert(receivedData, 'id')
+//     .then(newDog => response.status(201).json({ id: newDog[0]}))
+//     .catch(error => response.status(500).json({ error }))
+// })
+
+
+app.post('/api/v1/users/:id/dogs', async (request, response) => {
+  const newDog = request.body
+  console.log('new dog', newDog)
+
+  for (const requiredParam of ['user_id', 'name', 'sex', 'breed', 'size', 'age', 'fixed', 'vaccinated', 'good_with_kids']) {
+    if (!newDog[requiredParam]) {
+      return response.status(422).json({
+        error: `Expected { user_id: <int>, name: <string>, sex: <string>, breed: <string>, size: <string>, age: <int>, fixed: <boolean>, vaccinated: <boolean>, good_with_kids: <boolean> },
+        Missing ${requiredParam}`
+      })
+    }
+  }
+
+  try {
+    const dogs = await database('dogs').insert(newDog, 'id')
+    console.log('dogs', dogs)
+    if (dogs.length) {
+      console.log('hello')
+      return response.status(201).json({ id })
+    } else {
+      console.log('here')
+      return response.status(404).send({ error: 'Could not add dog'})
+    }
+  } catch(error) {
+    console.log('error')
+    return response.status(500).json({ error })
+  }
+})
+
+
+// app.post('/api/v1/users/:userId/catalogs', async (request, response) => {
+// 	const newCatalog = request.body;
+// 	for (let requiredParameter of ['catalogName', 'user_id']) {
+// 		if (!newCatalog[requiredParameter]) {
+// 			return response.status(422).send({
+// 				error: `Expected format: { catalogName: <string>, user_id: <integer> }. You are missing a ${requiredParameter} property.`
+// 			});
+// 		}
+// 	}
+// 	try {
+// 		const catalogs = await database('catalogs').insert(newCatalog, 'id');
+// 		if (catalogs.length) {
+// 			const { catalogName } = newCatalog;
+// 			response.status(201).send({ catalogName, id: catalogs[0] });
+// 		} else {
+// 			response
+// 				.status(404)
+// 				.send({ error: 'The catalog could not be submitted' });
+// 		}
+// 	} catch (error) {
+// 		response.status(500).json({ error });
+// 	}
+// });
+
+
+
+// app.post('/api/v1/palettes', cors(), (req, resp) => {
+//   const receivedData = req.body;
+//   console.log('hi')
+//   for (const requiredParam of ['project_id', 'palette_name', 'color_1', 'color_2', 'color_3', 'color_4', 'color_5']) {
+//     if (!receivedData[requiredParam]) {
+//       return resp.status(422).json({
+//         error: `Expected { project_id: <int>, palette_name: <string>, color_1: <string>, color_2: <string> color_3: <string>, color_4: <string>, color_5: <string> } 
+//         Missing ${requiredParam}!`,
+//       });
+//     }
+//   }
+//   database('palettes')
+//     .insert(receivedData, 'id')
+//     .then((newPalette) => resp.status(201).json({ id: newPalette[0] }))
+//     .catch((err) => resp.status(500).json({ err }));
+// });
