@@ -144,60 +144,16 @@ app.post('/api/v1/users/:id/dogs', async (request, response) => {
 
   try {
     const dogs = await database('dogs').insert(newDog, 'id')
-    console.log('dogs', dogs)
     if (dogs.length) {
-      console.log('hello')
-      return response.status(201).json({ id })
+      return response.status(201).json({ id: dogs[0]})
     } else {
-      console.log('here')
       return response.status(404).send({ error: 'Could not add dog'})
     }
   } catch(error) {
-    console.log('error')
     return response.status(500).json({ error })
   }
 })
 
 
-// app.post('/api/v1/users/:userId/catalogs', async (request, response) => {
-// 	const newCatalog = request.body;
-// 	for (let requiredParameter of ['catalogName', 'user_id']) {
-// 		if (!newCatalog[requiredParameter]) {
-// 			return response.status(422).send({
-// 				error: `Expected format: { catalogName: <string>, user_id: <integer> }. You are missing a ${requiredParameter} property.`
-// 			});
-// 		}
-// 	}
-// 	try {
-// 		const catalogs = await database('catalogs').insert(newCatalog, 'id');
-// 		if (catalogs.length) {
-// 			const { catalogName } = newCatalog;
-// 			response.status(201).send({ catalogName, id: catalogs[0] });
-// 		} else {
-// 			response
-// 				.status(404)
-// 				.send({ error: 'The catalog could not be submitted' });
-// 		}
-// 	} catch (error) {
-// 		response.status(500).json({ error });
-// 	}
-// });
 
 
-
-// app.post('/api/v1/palettes', cors(), (req, resp) => {
-//   const receivedData = req.body;
-//   console.log('hi')
-//   for (const requiredParam of ['project_id', 'palette_name', 'color_1', 'color_2', 'color_3', 'color_4', 'color_5']) {
-//     if (!receivedData[requiredParam]) {
-//       return resp.status(422).json({
-//         error: `Expected { project_id: <int>, palette_name: <string>, color_1: <string>, color_2: <string> color_3: <string>, color_4: <string>, color_5: <string> } 
-//         Missing ${requiredParam}!`,
-//       });
-//     }
-//   }
-//   database('palettes')
-//     .insert(receivedData, 'id')
-//     .then((newPalette) => resp.status(201).json({ id: newPalette[0] }))
-//     .catch((err) => resp.status(500).json({ err }));
-// });
