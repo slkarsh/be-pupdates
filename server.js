@@ -90,3 +90,23 @@ app.get('/api/v1/dog_images/:id', (request, response) => {
     .catch(error => response.status(500).json({ error }))
 })
 
+
+app.post('/api/v1/login', (request, response) => {
+  const { email, password } = request.body
+  database('users')
+    .where('email', email)
+    .select()
+    .then(user => {
+      if (user.length && password === user[0].password) {
+        const { first_name, id } = user[0]
+        return response.status(200).send({ first_name, id})
+      } else if (user.length && password !== user.password) {
+        console.log('user pw', user[0].password)
+        return response.status(404).send({ error: 'Password incorrect, please try again'})
+      } else {
+        return response.status(404).send({ error: 'User not found'})
+      }
+    })
+    .catch(error => response.status(500).json({ error }))
+})
+
