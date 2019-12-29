@@ -90,3 +90,70 @@ app.get('/api/v1/dog_images/:id', (request, response) => {
     .catch(error => response.status(500).json({ error }))
 })
 
+
+app.post('/api/v1/login', (request, response) => {
+  const { email, password } = request.body
+  database('users')
+    .where('email', email)
+    .select()
+    .then(user => {
+      if (user.length && password === user[0].password) {
+        const { first_name, id } = user[0]
+        return response.status(200).json({ first_name, id})
+      } else if (user.length && password !== user.password) {
+        return response.status(404).json({ error: 'Password incorrect, please try again'})
+      } else {
+        return response.status(404).json({ error: 'User not found'})
+      }
+    })
+    .catch(error => response.status(500).json({ error }))
+})
+
+// app.post('/api/v1/dogs', (request, response) => {
+//   const receivedData = request.body
+//   console.log('rec', receivedData)
+
+//   for (const requiredParam of ['user_id', 'name', 'sex', 'breed', 'size', 'age', 'fixed', 'vaccinated', 'good_with_kids']) {
+//     if (!receivedData[requiredParam]) {
+//       return response.status(422).json({
+//         error: `Expected { user_id: <int>, name: <string>, sex: <string>, breed: <string>, size: <string>, age: <int>, fixed: <boolean>, vaccinated: <boolean>, good_with_kids: <boolean> },
+//         Missing ${requiredParam}`
+//       })
+//     }
+//   }
+
+//   database('dogs')
+//     .insert(receivedData, 'id')
+//     .then(newDog => response.status(201).json({ id: newDog[0]}))
+//     .catch(error => response.status(500).json({ error }))
+// })
+
+
+app.post('/api/v1/users/:id/dogs', async (request, response) => {
+  const newDog = request.body
+  console.log('new dog', newDog)
+
+  for (const requiredParam of ['user_id', 'name', 'sex', 'breed', 'size', 'age', 'fixed', 'vaccinated', 'good_with_kids']) {
+    if (!newDog[requiredParam]) {
+      return response.status(422).json({
+        error: `Expected { user_id: <int>, name: <string>, sex: <string>, breed: <string>, size: <string>, age: <int>, fixed: <boolean>, vaccinated: <boolean>, good_with_kids: <boolean> },
+        Missing ${requiredParam}`
+      })
+    }
+  }
+
+  try {
+    const dogs = await database('dogs').insert(newDog, 'id')
+    if (dogs.length) {
+      return response.status(201).json({ id: dogs[0]})
+    } else {
+      return response.status(404).send({ error: 'Could not add dog'})
+    }
+  } catch(error) {
+    return response.status(500).json({ error })
+  }
+})
+
+
+
+
