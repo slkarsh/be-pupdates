@@ -98,8 +98,8 @@ app.post('/api/v1/login', (request, response) => {
     .select()
     .then(user => {
       if (user.length && password === user[0].password) {
-        const { first_name, id } = user[0]
-        return response.status(200).json({ first_name, id})
+        const { first_name, last_name, email, photo, description, id } = user[0]
+        return response.status(200).json({ first_name, last_name, email, photo, description, id})
       } else if (user.length && password !== user.password) {
         return response.status(404).json({ error: 'Password incorrect, please try again'})
       } else {
@@ -111,7 +111,6 @@ app.post('/api/v1/login', (request, response) => {
 
 app.post('/api/v1/users/:id/dogs', async (request, response) => {
   const newDog = request.body
-  console.log('new dog', newDog)
 
   for (const requiredParam of ['user_id', 'name', 'sex', 'breed', 'size', 'age', 'fixed', 'vaccinated', 'good_with_kids']) {
     if (!newDog[requiredParam]) {
