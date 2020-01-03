@@ -98,12 +98,12 @@ app.post('/api/v1/login', (request, response) => {
     .select()
     .then(user => {
       if (user.length && password === user[0].password) {
-        const { first_name, id } = user[0]
-        return response.status(200).json({ first_name, id})
+        const { first_name, last_name, email, photo, description, id } = user[0]
+        return response.status(200).json({ first_name, last_name, email, photo, description, id})
       } else if (user.length && password !== user.password) {
         return response.status(404).json({ error: 'Password incorrect, please try again'})
       } else {
-        return response.status(404).json({ error: 'User not found'})
+        return response.status(422).json({ error: 'User not found'})
       }
     })
     .catch(error => response.status(500).json({ error }))
@@ -111,7 +111,6 @@ app.post('/api/v1/login', (request, response) => {
 
 app.post('/api/v1/users/:id/dogs', async (request, response) => {
   const newDog = request.body
-  console.log('new dog', newDog)
 
   for (const requiredParam of ['user_id', 'name', 'sex', 'breed', 'size', 'age', 'fixed', 'vaccinated', 'good_with_kids']) {
     if (!newDog[requiredParam]) {
@@ -131,6 +130,27 @@ app.post('/api/v1/users/:id/dogs', async (request, response) => {
     }
   } catch(error) {
     return response.status(500).json({ error })
+  }
+})
+
+app.post('/api/v1/reports', async (request, response) => {
+  const newReport = request.body
+
+  for (const requiredParam of ['user_id', 'description']) {
+    if (!newReport[requiredParam]) {
+      return response.status(422).json({ error: `Expected { user_id: <int>, description: <string>, missing ${requiredParam} }`})
+    }
+
+    try {
+      const reports = await database('reports').insert(newReport, 'id')
+      if (reports.length) {
+        return response.status(201).json({ id: reports[0] })
+      } else {
+        return response.status(404).json({ error: 'Could not add report' })
+      }
+    } catch(error) {
+      return response.status(500).json({ error })
+    }
   }
 })
 
