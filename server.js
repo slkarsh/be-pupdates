@@ -103,7 +103,7 @@ app.post('/api/v1/login', (request, response) => {
       } else if (user.length && password !== user.password) {
         return response.status(404).json({ error: 'Password incorrect, please try again'})
       } else {
-        return response.status(404).json({ error: 'User not found'})
+        return response.status(422).json({ error: 'User not found'})
       }
     })
     .catch(error => response.status(500).json({ error }))
