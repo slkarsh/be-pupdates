@@ -134,6 +134,27 @@ app.post('/api/v1/users/:id/dogs', async (request, response) => {
   }
 })
 
+app.post('/api/v1/reports', async (request, response) => {
+  const newReport = request.body
+
+  for (const requiredParam of ['user_id', 'description']) {
+    if (!newReport[requiredParam]) {
+      return response.status(422).json({ error: `Expected { user_id: <int>, description: <string>, missing ${requiredParam} }`})
+    }
+
+    try {
+      const reports = await database('reports').insert(newReport, 'id')
+      if (reports.length) {
+        return response.status(201).json({ id: reports[0] })
+      } else {
+        return response.status(404).json({ error: 'Could not add report' })
+      }
+    } catch(error) {
+      return response.status(500).json({ error })
+    }
+  }
+})
+
 
 
 
