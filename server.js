@@ -51,7 +51,6 @@ app.get('/api/v1/users/:id/dogs', (request, response) => {
     .catch((error) => response.status(500).json({ error }))
 })
 
-
 app.get('/api/v1/users/:id', (request, response) => {
   const { id } = request.params
   database('users')
@@ -65,7 +64,6 @@ app.get('/api/v1/users/:id', (request, response) => {
     })
     .catch(error => response.status(500).json({ error }))
 })
-
 
 app.get('/api/v1/dog_images', (request, response) => {
   database('dog_images').select()
@@ -89,7 +87,6 @@ app.get('/api/v1/dog_images/:id', (request, response) => {
     })
     .catch(error => response.status(500).json({ error }))
 })
-
 
 app.post('/api/v1/login', (request, response) => {
   const { email, password } = request.body
@@ -154,6 +151,17 @@ app.post('/api/v1/reports', async (request, response) => {
   }
 })
 
-
-
-
+app.patch('/api/v1/users/:id', (request, response) => {
+  const { id } = request.params;
+  const { photo } = request.body;
+  database('users')
+    .where({ id: id })
+    .update({ photo: photo })
+    .then(user => {
+      if (!user) {
+        response.status(404).json({ error: `No user found with id ${id}`})
+      } else {
+        response.status(202).json({ message: 'User photo updated!'})
+      }
+    });
+});
