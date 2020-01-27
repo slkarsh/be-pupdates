@@ -4,6 +4,10 @@ const environment = process.env.NODE_ENV || 'development'
 const configuration = require('./knexfile')[environment]
 const database = require('knex')(configuration)
 const cors = require('cors')
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
+
+
 
 
 app.set('port', process.env.PORT || 3000)
@@ -14,6 +18,8 @@ app.use(cors());
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on http://localhost:${app.get('port')} `)
 })
+
+http.listen(5000);
 
 app.get('/', (request, response) => {
   response.send("Welcome to the NodeJS PupDates Backend")
@@ -165,3 +171,9 @@ app.patch('/api/v1/users/:id', (request, response) => {
       }
     });
 });
+
+//chatting here
+
+io.on('connection', (socket) => {
+  console.log('A user connected')
+})
